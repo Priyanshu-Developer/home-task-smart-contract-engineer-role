@@ -181,7 +181,7 @@ The contract was successfully deployed to Ethereum Sepolia testnet.
 
 ## Deployed Contracts
 
-- ReputationSystem: `0xE8212596A7391f2Ac4B0060296A863a210b0c483`
+- ReputationSystem: `0x7e4e2b40123E9108146Da5408BBba65ac0ffD124`
 - WorldCupBetting / PredictionMarket:
   `0xFaBB2f32D52bc9b52c78074C25481D66B936ab13`
 
