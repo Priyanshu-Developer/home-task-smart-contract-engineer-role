@@ -91,3 +91,98 @@ Revert messages the tests assert include, among others: `Too early`, `Only arbit
 - [ ] You can explain how fees work in **Scenario B** and how ownership moves in **Scenario G**.
 
 Good luck.
+
+# WorldCupBetting Assessment Submission
+
+## Test Status
+
+The assessment test suite passes successfully using:
+
+```bash
+npx hardhat test test/WorldCupBetting.assessment.test.ts
+```
+
+---
+
+# Scenario B – Fee Mechanism
+
+The contract applies a 2% platform fee on winning payouts.
+
+## Fee Flow
+
+1. Users place bets into the market pool.
+2. After market resolution, winning users claim rewards proportional to their shares.
+3. During payout calculation:
+   - Gross payout is calculated from the total pool.
+   - A 2% platform fee is deducted.
+   - Remaining amount is transferred to the winner.
+
+Example:
+
+- Total payout: 10 ETH
+- Platform fee (2%): 0.2 ETH
+- User receives: 9.8 ETH
+
+Collected fees are tracked in:
+
+```solidity
+mapping(address => uint256) public collectedFees;
+```
+
+- `address(0)` is used for ETH fees.
+- ERC20 token address is used for token-based fees.
+
+The contract owner can withdraw accumulated fees using:
+
+```solidity
+withdrawFees(address tokenAddress)
+```
+
+---
+
+# Scenario G – Position Ownership Transfer
+
+The contract supports a secondary market for trading betting positions.
+
+## Ownership Flow
+
+1. A bettor lists their position using:
+
+```solidity
+listPosition(betId, price)
+```
+
+2. Another user purchases the position using:
+
+```solidity
+buyPosition(betId)
+```
+
+3. During purchase:
+   - Payment is transferred to the seller.
+   - Ownership of the bet is transferred to the buyer by updating:
+
+```solidity
+bet.bettor = msg.sender;
+```
+
+4. The new owner becomes eligible to:
+   - claim winnings
+   - receive payout
+   - interact with the position
+
+This behavior is validated in Scenario G where the buyer successfully claims winnings after purchasing a winning position.
+
+---
+
+# Deployment
+
+The contract was successfully deployed to Ethereum Sepolia testnet.
+
+## Deployed Contracts
+
+- ReputationSystem: `0xE8212596A7391f2Ac4B0060296A863a210b0c483`
+- WorldCupBetting / PredictionMarket:
+  `0xFaBB2f32D52bc9b52c78074C25481D66B936ab13`
+
+---
